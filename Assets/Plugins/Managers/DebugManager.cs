@@ -1,45 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace Managers.DebugHandler
 {
     /// <summary>
-    /// 負責Debug.Log相關處理
+    /// 負責Debug.Log相關處理(用static架構設計)。
+    /// 若要引用，可直接在Script開頭使用"Debug = Managers.DebugHandler.DebugManager;"
     /// </summary>
     public class DebugManager
     {
-        #region {========== Singleton: Instance ==========}
-        private static DebugManager _instance;
-        public static DebugManager Instance
-        {
-            get
-            {
-                if (_instance == null) _instance = new DebugManager();
-                return _instance;
-            }
-        }
-        #endregion
-
         /// <summary>
         /// 是否啟動Log
         /// </summary>
-        public bool IsActivated = true;
+        public static bool IsActivated = true;
         /// <summary>
         /// 每當Log訊息時觸發
         /// </summary>
-        public UnityAction<string> onLogEvent;
+        public static UnityAction<string> onLogEvent;
 
-        string separater = "========== Separater ==========";
+        private static string separater = "========== Separater ==========";
 
         #region {========== Log歷史訊息: LogHistoryList ==========}
-        private List<string> logList = new List<string>();
-        public List<string> LogHistoryList
+        private static List<string> logList = new List<string>();
+        public static List<string> LogHistoryList
         {
             get { return logList; }
         }
-        public string LogHistory
+        public static string LogHistory
         {
             get
             {
@@ -56,11 +44,11 @@ namespace Managers.DebugHandler
         /// <summary>
         /// Debug.Log 指定訊息
         /// </summary>
-        public void Log(string msg, TextColor? color = null, bool timeStamp = true)
+        public static void Log(string msg, TextColor? color = null, bool timeStamp = true)
         {
             if (!IsActivated) return;
             msg = SetTextColor(msg, color);
-            Debug.Log(msg);
+            UnityEngine.Debug.Log(msg);
             if (!msg.Contains(separater))
             {
                 RecordMsg(msg, timeStamp);
@@ -70,7 +58,7 @@ namespace Managers.DebugHandler
         /// <summary>
         /// Debug.Log 分隔行
         /// </summary>
-        public void LogSeparater()
+        public static void LogSeparater()
         {
             if (!IsActivated) return;
             separater = SetTextSize(separater, 16);
@@ -114,7 +102,7 @@ namespace Managers.DebugHandler
         /// <summary>
         /// 記錄Log訊息
         /// </summary>
-        private void RecordMsg(string msg, bool isTimeStamp)
+        private static void RecordMsg(string msg, bool isTimeStamp)
         {
             if (isTimeStamp) msg = TimeStamp + msg;
             logList.Add(msg);
@@ -124,7 +112,7 @@ namespace Managers.DebugHandler
         /// <summary>
         /// 目前時間點
         /// </summary>
-        private string TimeStamp
+        private static string TimeStamp
         {
             get
             {

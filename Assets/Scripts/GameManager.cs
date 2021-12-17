@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Managers.DebugHandler;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using System;
+using Debug = Managers.DebugHandler.DebugManager;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,19 +9,19 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        DebugManager.Instance.onLogEvent += OnLogEvent;
-        DebugManager.Instance.Log("hello");
-        DebugManager.Instance.Log("Hail to You");
-        DebugManager.Instance.Log("Good Day");
-        DebugManager.Instance.LogSeparater();
-        DebugManager.Instance.Log("YEAH BOI~~");
+        Debug.onLogEvent += OnLogEvent;
+        Debug.Log("hello");
+        Debug.Log("Hail to You");
+        Debug.Log("Good Day");
+        Debug.LogSeparater();
+        Debug.Log("YEAH BOI~~");
     }
 
     private void OnLogEvent(string msg)
     {
-        Debug.Log("Called");
-        console.text = DebugManager.Instance.LogHistory;
-        string msgCount = DebugManager.Instance.LogHistoryList.Count.ToString();
-        console.text += "Count: " + DebugManager.SetTextColor(msgCount, DebugManager.TextColor.lime);
+        //Debug.Log("Called");
+        console.text = Debug.LogHistory;
+        string msgCount = Debug.LogHistoryList.Count.ToString();
+        console.text += "Count: " + Debug.SetTextColor(msgCount, Debug.TextColor.lime);
     }
 }

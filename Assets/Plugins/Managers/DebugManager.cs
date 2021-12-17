@@ -15,10 +15,13 @@ namespace Managers.DebugHandler
         /// </summary>
         public static bool IsActivated = true;
         /// <summary>
-        /// 每當Log訊息時觸發
+        /// 是否將Log字串存放於HistoryList裡
+        /// </summary>
+        public static bool isRecord = false;
+        /// <summary>
+        /// 每當Debug.Log(訊息)時觸發
         /// </summary>
         public static UnityAction<string> onLogEvent;
-
         private static string separater = "========== Separater ==========";
 
         #region {========== Log歷史訊息: LogHistoryList ==========}
@@ -49,7 +52,8 @@ namespace Managers.DebugHandler
             if (!IsActivated) return;
             msg = SetTextColor(msg, color);
             UnityEngine.Debug.Log(msg);
-            if (!msg.Contains(separater))
+            onLogEvent?.Invoke(msg);
+            if (isRecord && !msg.Contains(separater))
             {
                 RecordMsg(msg, timeStamp);
             }
@@ -106,7 +110,6 @@ namespace Managers.DebugHandler
         {
             if (isTimeStamp) msg = TimeStamp + msg;
             logList.Add(msg);
-            onLogEvent?.Invoke(msg);
         }
 
         /// <summary>
